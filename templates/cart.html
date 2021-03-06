@@ -15,10 +15,10 @@
         <tbody>
         {% for melon in melons_cart %}
         <tr>
-            <td>{{ current_melon.common_name }}</td>
-            <td>{{ current_melon.quantity}}</td>
-            <td>{{ current_melon.price }}</td>
-            <td>{{ current_melon.total_cost }}</td>
+            <td>{{ melon.common_name }}</td>
+            <td>{{ melon.quantity}}</td>
+            <td>{{ melon.price }}</td>
+            <td>{{ melon.total_cost }}</td>
         </tr>
         {% endfor %}
         </tbody>
