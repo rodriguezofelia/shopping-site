@@ -83,8 +83,10 @@ def show_shopping_cart():
     order_total = 0
 
     melons_cart = []
+    
 
     cart = session.get('cart', {})
+    print(cart, "THIS IS THE CART")
 
     for melon_id, quantity in cart.items():
         current_melon = melons.get_by_id(melon_id)
@@ -98,7 +100,8 @@ def show_shopping_cart():
         current_melon.total_cost = total_cost
 
         #Adding melon object to the cart list
-        melon_cart.append(current_melon)
+        melons_cart.append(current_melon)
+        print(melons_cart, "THIS IS THE MELON CART")
 
     return render_template("cart.html",
                         melons_cart=melons_cart,
