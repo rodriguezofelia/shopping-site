@@ -88,7 +88,6 @@ def show_shopping_cart():
         return redirect("/melons")
 
     cart = session['cart']
-    print(cart, "THIS IS THE CART")
 
     for melon_id, quantity in cart.items():
         current_melon = melons.get_by_id(melon_id)
@@ -103,7 +102,6 @@ def show_shopping_cart():
 
         #Adding melon object to the cart list
         melons_cart.append(current_melon)
-        print(melons_cart, "THIS IS THE MELON CART")
 
     return render_template("cart.html",
                         melons_cart=melons_cart,
@@ -128,7 +126,6 @@ def add_to_cart(melon_id):
     if 'cart' not in session.keys():
         session['cart'] = {}
 
-    # print(session['cart'][melon_id])
     # - check if the desired melon id is the cart, and if not, put it in
     # - increment the count for that melon id by 1
     session['cart'][melon_id] = session['cart'].get(melon_id, 0) + 1
