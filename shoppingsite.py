@@ -6,7 +6,7 @@ put melons in a shopping cart.
 Authors: Joel Burton, Christian Fernandez, Meggie Mahnken, Katie Byers.
 """
 
-from flask import Flask, render_template, redirect, flash
+from flask import Flask, render_template, redirect, flash, session
 import jinja2
 
 import melons
@@ -78,7 +78,36 @@ def show_shopping_cart():
     # Make sure your function can also handle the case wherein no cart has
     # been added to the session
 
-    return render_template("cart.html")
+    # current_melon = 0
+    # price = 0 
+    order_total = 0
+    melons_cart = []
+    
+    if "cart" not in session.keys():
+        flash("There is nothing in your cart!")
+        return redirect("/melons")
+
+    cart = session['cart']
+    print(cart, "THIS IS THE CART")
+
+    for melon_id, quantity in cart.items():
+        current_melon = melons.get_by_id(melon_id)
+
+        total_cost = quantity * current_melon.price
+
+        order_total += total_cost
+
+        # Adding quantity and total price as attributes to Melon object
+        current_melon.quantity = quantity
+        current_melon.total_cost = total_cost
+
+        #Adding melon object to the cart list
+        melons_cart.append(current_melon)
+        print(melons_cart, "THIS IS THE MELON CART")
+
+    return render_template("cart.html",
+                        melons_cart=melons_cart,
+                        order_total=order_total)
 
 
 @app.route("/add_to_cart/<melon_id>")
@@ -95,12 +124,20 @@ def add_to_cart(melon_id):
     #
     # - check if a "cart" exists in the session, and create one (an empty
     #   dictionary keyed to the string "cart") if not
+
+    if 'cart' not in session.keys():
+        session['cart'] = {}
+
+    # print(session['cart'][melon_id])
     # - check if the desired melon id is the cart, and if not, put it in
     # - increment the count for that melon id by 1
-    # - flash a success message
-    # - redirect the user to the cart page
+    session['cart'][melon_id] = session['cart'].get(melon_id, 0) + 1
 
-    return "Oops! This needs to be implemented!"
+    # - flash a success message
+    flash("Melon added to your cart!")
+
+    # - redirect the user to the cart page
+    return redirect("/melons")
 
 
 @app.route("/login", methods=["GET"])
